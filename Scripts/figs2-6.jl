@@ -10,7 +10,6 @@ using LaTeXStrings
 PyPlot.rc("text", usetex = "true")
 PyPlot.rc("font", family = "CMU Serif")
 
-# PyPlot.rc("axes", xmargin = 0.1)
 #---
 function τ(h; σ = 3, δ = 1.4, L = 500)
     tau = (1.0 .+ (σ^2.0) * (4 * δ / L)^(2.0 * h))^0.5 # tortuosity
@@ -122,9 +121,9 @@ function g(filename; hurst = collect(0.3:0.1:0.9))
 end
 
 #---
-p1, coefs = g("data/G-all_1.csv")
-savefig(p1, "../Paper/fig2.pdf")
-plot(p1)
+# p1, coefs = g("data/G-all_1.csv")
+# savefig(p1, "../Paper/fig2.pdf")
+# plot(p1)
 
 #---
 function collapse(filename;
@@ -236,9 +235,9 @@ function collapse(filename;
     end
 end
 #---
-p2 = collapse("data/G-all_1.csv", plt=true, δs=0.025)
-savefig("../Paper/fig4.pdf")
-plot(p2)
+#p2 = collapse("data/G-all_1.csv", plt=true, δs=0.025)
+#savefig("../Paper/fig4.pdf")
+#plot(p2)
 
 #---
 function plot_tau(coefs)
@@ -320,9 +319,9 @@ function plotalphaH(coefs)
     plot!(xfit, yfit, label = "", color = :black, linewidth = 1)
     return p4
 end
-pα = plotalphaH(coefs)
-pα
-savefig("../Paper/fig3_inset.pdf")
+#pα = plotalphaH(coefs)
+#pα
+#savefig("../Paper/fig3_inset.pdf")
 
 #---
 function plotalpha(coefs)
@@ -377,15 +376,16 @@ function plotalpha(coefs)
     plot!(xfit, yfit, color = :black, label = "")
     return p4, fit.param
 end
-pα, params = plotalpha(coefs)
-pα
-savefig("../Paper/fig3.pdf")
+#---
+#pα, params = plotalpha(coefs)
+#pα
+#savefig("../Paper/fig3.pdf")
 # savefig("../../paper18122019/fig3.png")
 
 #---
 function plotbeta(coefs)
-    x = coefs.α ./ coefs.h
     y = coefs.β
+    x = coefs.α ./ coefs.h
 
     @. model(x, p) = p[1] * x + p[2]
     p4 = plot(
@@ -439,9 +439,11 @@ function plotbeta(coefs)
     plot!(xfit, yfit, color = :black, label = "")
     return p4, fit.param
 end
-pβ, params = plotbeta(coefs)
-pβ
-savefig("../Paper/fig5.pdf")
+
+#---
+# pβ, params = plotbeta(coefs)
+# pβ
+# savefig("../Paper/fig5.pdf")
 
 #---
 function plotgamma(coefs)
@@ -505,7 +507,48 @@ function plotgamma(coefs)
     println(x)
     return p4, fit.param
 end
-pγ, params = plotgamma(coefs)
-pγ
-savefig("../Paper/fig5b.pdf")
+#---
+#pγ, params = plotgamma(coefs)
+#pγ
+#savefig("../Paper/fig5b.pdf")
 # print(params)
+
+#---
+
+function fig6(fname="data/pi_all.csv")
+    df = CSV.read(fname)
+
+    # filter Re
+
+    df3d = filter(row->(0<row[:v3d]<22),df)
+    df3dm = aggregate(df3d, :H, mean)
+
+
+    p = plot(size = (400, 300),
+            legendfontsize = 11,
+            legend = :bottomright,
+            top_margin = 3mm,
+            bottom_margin = 3mm,
+            left_margin=3mm,
+            right_margin=3mm,
+            fg_legend = :white,
+            background_color_legend = :transparent,
+            dpi = 150,
+            framestyle = :box,grid = false,
+            xaxis=(L"H", [0.2,0.9], font(15)),
+            yaxis=(L"\pi", [0.4,0.99], font(15)))
+
+    p = scatter!(df3dm[:H], df3dm[:pi3d_mean], marker=:circle, markersize=10, color=2, label="Bulk")
+    p = scatter!(df3dm[:H], df3dm[:pi2d_mean], marker=:utriangle, markersize=10,
+    color=1, label=L"w/2"*" level")
+    plot!(
+        [0.7],
+        seriestype = :hline,
+        linewidth = 0.7,
+        color = :black,
+        linestyle = :dash,
+        label = "")
+    return p
+    end
+p=fig6()
+savefig("../Paper/fig6.pdf")
