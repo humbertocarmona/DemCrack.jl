@@ -1,0 +1,14 @@
+*.jl.*.cov
+*.jl.cov
+*.jl.mem
+*.vtu
+*.jld
+crack_0*
+/results/
+/data/
+/temp/
+/snaps/
+.DS_Store
+/Manifest.toml
+/dev/
+/.ipynb_checkpoints/
