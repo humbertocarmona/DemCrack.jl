@@ -39,7 +39,7 @@ function g(filename; hurst = collect(0.3:0.1:0.9))
         left_margin=3mm,
         right_margin=3mm,
         fg_legend = :white,
-        dpi = 300,
+        dpi = 150,
         framestyle = :box,
         #xaxis = (L"Re", [0.4, 700],  [1, 10, 100, 1000], font(15), :log),
         #yaxis = (L"G", [11.35, 1000], [10, 100, 1000], font(15), :log),
@@ -121,9 +121,9 @@ function g(filename; hurst = collect(0.3:0.1:0.9))
 end
 
 #---
-# p1, coefs = g("data/G-all_1.csv")
-# savefig(p1, "../Paper/fig2.pdf")
-# plot(p1)
+p1, coefs = g("data/G-all_1.csv")
+savefig(p1, "../Paper/fig2.pdf")
+plot(p1)
 
 #---
 function collapse(filename;
@@ -235,9 +235,9 @@ function collapse(filename;
     end
 end
 #---
-#p2 = collapse("data/G-all_1.csv", plt=true, δs=0.025)
-#savefig("../Paper/fig4.pdf")
-#plot(p2)
+p2 = collapse("data/G-all_1.csv", plt=true, δs=0.025)
+savefig("../Paper/fig4.pdf")
+plot(p2)
 
 #---
 function plot_tau(coefs)
@@ -268,6 +268,7 @@ function plot_tau(coefs)
     plot!(xfit, Lp, color = :black, label = "Fit", linestyle = :dash)
     return p1
 end
+#---
 # plot_tau(coefs)
 
 #---
@@ -319,9 +320,10 @@ function plotalphaH(coefs)
     plot!(xfit, yfit, label = "", color = :black, linewidth = 1)
     return p4
 end
-#pα = plotalphaH(coefs)
-#pα
-#savefig("../Paper/fig3_inset.pdf")
+#---
+pα = plotalphaH(coefs)
+pα
+savefig("../Paper/fig3_inset.pdf")
 
 #---
 function plotalpha(coefs)
@@ -343,7 +345,7 @@ function plotalpha(coefs)
         left_margin=3mm,
         right_margin=3mm,
         fg_legend = :white,
-        dpi = 300,
+        dpi = 150,
         frame = :box,
         grid = false,
         xaxis = (L"\tau", font(15)),
@@ -377,10 +379,9 @@ function plotalpha(coefs)
     return p4, fit.param
 end
 #---
-#pα, params = plotalpha(coefs)
-#pα
-#savefig("../Paper/fig3.pdf")
-# savefig("../../paper18122019/fig3.png")
+pα, params = plotalpha(coefs)
+pα
+savefig("../Paper/fig3.pdf")
 
 #---
 function plotbeta(coefs)
@@ -441,9 +442,9 @@ function plotbeta(coefs)
 end
 
 #---
-# pβ, params = plotbeta(coefs)
-# pβ
-# savefig("../Paper/fig5.pdf")
+pβ, params = plotbeta(coefs)
+pβ
+savefig("../Paper/fig5.pdf")
 
 #---
 function plotgamma(coefs)
@@ -508,13 +509,11 @@ function plotgamma(coefs)
     return p4, fit.param
 end
 #---
-#pγ, params = plotgamma(coefs)
-#pγ
-#savefig("../Paper/fig5b.pdf")
-# print(params)
+pγ, params = plotgamma(coefs)
+pγ
+savefig("../Paper/fig5b.pdf")
 
 #---
-
 function fig6(fname="data/pi_all.csv")
     df = CSV.read(fname)
 
@@ -550,5 +549,8 @@ function fig6(fname="data/pi_all.csv")
         label = "")
     return p
     end
+
+#---
 p=fig6()
 savefig("../Paper/fig6.pdf")
+plot(p)
